@@ -54,7 +54,7 @@ public class FormularioActivity extends AppCompatActivity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editarEmpleado("http://apilaravel.norwayeast.cloudapp.azure.com/api/editar-empleado/");
+                editarEmpleado("http://apilaravel.norwayeast.cloudapp.azure.com/api/edit-empleados/11");
             }
         });
 
@@ -68,7 +68,7 @@ public class FormularioActivity extends AppCompatActivity {
         btnElim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eliminarEmpleado("http://apilaravel.norwayeast.cloudapp.azure.com/api/delete-empleados/9");
+                eliminarEmpleado("http://apilaravel.norwayeast.cloudapp.azure.com/api/delete-empleados/25");
             }
 
         });
@@ -180,34 +180,35 @@ public class FormularioActivity extends AppCompatActivity {
 
     }
 
-    private void eliminarEmpleado(String URL){
-        StringRequest postRequest = new StringRequest(Request.Method.DELETE, URL, new Response.Listener<String>() {
+    private void eliminarEmpleado(String URL) {
+        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                // Aquí no necesitas procesar la respuesta ya que es una operación de eliminación.
+                // Puedes mostrar un mensaje de éxito o realizar cualquier acción necesaria.
                 Toast.makeText(getApplicationContext(), "USUARIO ELIMINADO", Toast.LENGTH_SHORT).show();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
 
-                    edtCod.setText(jsonObject.getString("codigo_empleado"));
-                    edtNomb.setText(jsonObject.getString("nombre_empleado"));
-                    edtTel.setText(jsonObject.getString("numero_telefono"));
-                    edtCorreo.setText(jsonObject.getString("correo"));
-                    edtDirecc.setText(jsonObject.getString("direccion"));
-                    edtDepart.setText(jsonObject.getString("departamento"));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
+                // Puedes limpiar los campos de texto u realizar otras acciones después de la eliminación.
+                limpiarCampos();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", error.getMessage());
+                Log.e("ERROR", "Error al intentar eliminar empleado: " + error.getMessage());
             }
-        }
-        );
-        Volley.newRequestQueue(this).add(postRequest);
+        });
 
+        Volley.newRequestQueue(this).add(deleteRequest);
+    }
+
+    // Método para limpiar los campos de texto
+    private void limpiarCampos() {
+        edtCod.setText("");
+        edtNomb.setText("");
+        edtTel.setText("");
+        edtCorreo.setText("");
+        edtDirecc.setText("");
+        edtDepart.setText("");
     }
 
     public void regresarMenu(View view){
